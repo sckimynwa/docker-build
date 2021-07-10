@@ -4,6 +4,7 @@ const client = redis.createClient(
   process.env["REDIS_HOST"] || "localhost"
 );
 
+// using fastify webserver
 const fastify = require("fastify")({
   logger: true,
 });
