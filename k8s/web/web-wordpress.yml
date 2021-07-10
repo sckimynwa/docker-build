@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-wordpress
+spec:
+  selector:
+    matchLabels:
+      app: web
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: web
+        tier: frontend
+    spec:
+      containers:
+        - image: wordpress:5.5.3-apache
+          name: wordpress
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: web-mysql
+            - name: WORDPRESS_DB_PASSWORD
+              value: password
+          ports:
+            - containerPort: 80
+              name: wordpress
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-np
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      protocol: TCP
+      nodePort: 30000
+  selector:
+    app: web
+    tier: app
